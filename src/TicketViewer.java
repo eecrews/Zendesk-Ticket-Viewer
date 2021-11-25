@@ -11,13 +11,26 @@ public class TicketViewer {
 	private static int numPages = 1;
 	
 	private static void pagePartition() {
-		for(int i=1; i<=numPages; i++) {
+		
+		// Does not iterate over the last page
+		for(int i=1; i<numPages; i++) {
 			List<String> newPage;
 
 			newPage = tickets.subList((i-1)*25, i*25);
 
 			ticketPages.add(newPage);
 		}
+		
+		// Manual addition of last page
+		int curr = (numPages-1)*25;
+		List<String> finalPage = new ArrayList<String>();
+		
+		while(curr < numTickets) {
+			finalPage.add(tickets.get(curr));
+			curr++;
+		}
+		
+		ticketPages.add(finalPage);
 	}
 	
 	private static String viewAllTickets() {
@@ -72,32 +85,7 @@ public class TicketViewer {
 		tickets.add("Two");
 		tickets.add("Three");
 		tickets.add("One");
-		
-		tickets.add("One");
-		tickets.add("Two");
-		tickets.add("Three");
-		tickets.add("One");
-		tickets.add("Two");
-		tickets.add("Three");
-		tickets.add("One");
-		tickets.add("Two");
-		tickets.add("Three");
-		tickets.add("One");
-		tickets.add("Two");
-		tickets.add("Three");
-		tickets.add("One");
-		tickets.add("Two");
-		tickets.add("Three");
-		tickets.add("One");
-		tickets.add("Two");
-		tickets.add("Three");
-		tickets.add("One");
-		tickets.add("Two");
-		tickets.add("Three");
-		tickets.add("One");
-		tickets.add("Two");
-		tickets.add("Three");
-		tickets.add("One");
+
 		
 		
 		driver();
