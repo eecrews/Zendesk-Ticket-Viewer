@@ -5,8 +5,21 @@ import java.util.Arrays;
 public class TicketViewer {
 	
 	private static ArrayList<String> tickets = new ArrayList<String>();
+	private static ArrayList<ArrayList<String>> ticketPages = new ArrayList<ArrayList<String>>();
 	private static int numTickets;
 	private static int numPages = 1;
+	
+	private static void pagePartition() {
+		for(int i=0; i<numPages; i++) {
+			ArrayList<String> newPage = new ArrayList<String>();
+
+			for(int j=0; j<25; j++) {
+				newPage.add(tickets.remove(j));
+			}
+
+			ticketPages.add(newPage);
+		}
+	}
 	
 	private static String viewPage(int pageNum) {
 		String ticketsOnPage = "";
