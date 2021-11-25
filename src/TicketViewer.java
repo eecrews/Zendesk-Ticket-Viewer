@@ -24,6 +24,10 @@ public class TicketViewer {
 		return allTickets;
 	}
 	
+	private static void driver() {
+		
+	}
+	
 
 	
 	public static void main(String[] args) {
@@ -56,7 +60,7 @@ public class TicketViewer {
 		tickets.add("Two");
 		tickets.add("Three");
 		
-		System.out.println(viewAllTickets());
+		driver();
 
 	}
 	
