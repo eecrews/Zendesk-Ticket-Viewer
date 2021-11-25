@@ -10,18 +10,19 @@ public class TicketViewer {
 	private static int numPages = 1;
 	
 	private static void pagePartition() {
-		for(int i=0; i<numPages; i++) {
+		for(int i=1; i<=numPages; i++) {
 			ArrayList<String> newPage = new ArrayList<String>();
 
 			for(int j=0; j<25; j++) {
-				newPage.add(tickets.remove(j));
+				if(tickets.get(j) != null)
+					newPage.add(tickets.remove(j));
 			}
 
 			ticketPages.add(newPage);
 		}
 	}
 	
-	private static String viewPage(int pageNum) {
+	private static String viewAllTickets() {
 		String ticketsOnPage = "";
 		int startIndex = (pageNum-1)*25;
 		int endIndex = (pageNum*25);
