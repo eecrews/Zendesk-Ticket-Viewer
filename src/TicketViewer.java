@@ -34,14 +34,14 @@ public class TicketViewer {
 	}
 	
 	// TODO: Display only 5 tickets per line
-	private static String viewAllTickets() {
+	private static void viewAllTickets() {
 		String allTickets = "";
 		
 		for(int i=0; i<numPages; i++) {
 			allTickets += ticketPages.get(i).toString() + "\n";
 		}
 
-		return allTickets;
+		System.out.println(allTickets);
 	}
 	
 	private static void driver() {
@@ -71,11 +71,6 @@ public class TicketViewer {
 			}
 			
 		} while(true);
-		
-		//input.close();
-		
-		//System.out.println(viewAllTickets());
-		
 		
 		
 	}
