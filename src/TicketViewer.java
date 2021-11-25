@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.ProcessBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,8 +12,9 @@ public class TicketViewer {
 	private static final String INVALID_INPUT = "Invalid input. Please try again.";
 	private static final String PAGE_NONEXISTENT = "Page does not exist. Please try again.";
 	
-	private static String username = "";
-	private static String password = "";
+	private static String email = "eecrews@wisc.edu";
+	private static String password = "Kiradog101!beau";
+	private static String subdomain = "zcceecrews";
 	
 	private static ArrayList<String> tickets = new ArrayList<String>();
 	private static ArrayList<List<String>> ticketPages = new ArrayList<List<String>>();
@@ -85,6 +89,23 @@ public class TicketViewer {
 
 	}
 	
+	private static void fetchTicketsFromAPI() {
+		String curl = "curl https://" + subdomain + ".zendesk.com/api/v2/tickets.json \\-v -u " 
+				+ email + ":" + password;
+		ProcessBuilder processBuilder = new ProcessBuilder(curl.split(" "));
+		processBuilder.directory(new File("/home/"));
+		try {
+			Process process = processBuilder.start();
+			InputStream inputStream = process.getInputStream();
+			int exitCode = process.exitValue();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	
 	private static void driver() {
 		numTickets = tickets.size();
 		
@@ -94,20 +115,20 @@ public class TicketViewer {
 		}
 		
 		pagePartition();
+
+		try {
+			
+			fetchTicketsFromAPI();
+			
+		} catch(Exception e) {
+			
+		}
 		
-		Scanner input = new Scanner(System.in);
-		System.out.println("Please enter your username.");
-		username = input.nextLine();
 		
-		System.out.println("Please enter your password.");
-		password = input.nextLine();
-		
-		
-		System.out.println("Welcome " + username + ". Here are your available tickets:");
+		System.out.println("Welcome " + email + ". Here are your available tickets:");
 		
 		viewAllTickets();
 		
-		input.close();
 					
 	}
 	
