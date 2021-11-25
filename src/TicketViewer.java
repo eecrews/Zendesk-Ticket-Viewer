@@ -9,11 +9,24 @@ public class TicketViewer {
 	private static int numPages = 1;
 	
 	private static String viewPage(int pageNum) {
-		String allTickets = "";
+		String ticketsOnPage = "";
+		int startIndex = (pageNum-1)*25;
+		int endIndex = (pageNum*25);
 		
-		allTickets = Arrays.toString(tickets.toArray());
+		for(int i=startIndex; i<endIndex; i=i+5) {
+			if(tickets.get(i) == null)
+				break;
+			
+			for(int j=i; j<i+5; j++) {
+				ticketsOnPage = ticketsOnPage + tickets.get(j) + "\t";
+			}
+			
+			
+		}
+		
+		ticketsOnPage = Arrays.toString(tickets.toArray());
 
-		return allTickets;
+		return ticketsOnPage;
 	}
 	
 	private static void driver() {
