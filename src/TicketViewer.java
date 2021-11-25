@@ -5,27 +5,24 @@ import java.util.Arrays;
 public class TicketViewer {
 	
 	private static ArrayList<String> tickets = new ArrayList<String>();
+	private static int numTickets;
+	private static int numPages = 1;
 	
-	private static String viewAllTickets() {
+	private static String viewPage(int pageNum) {
 		String allTickets = "";
 		
 		allTickets = Arrays.toString(tickets.toArray());
-		
-		int numPages = 1; // Number of pages shown to user is 1 by default.
-		
-		if(tickets.size() > 25) {
-			numPages = (int)Math.ceil(tickets.size()/25.0);
-		}
-		
-		for(int i=0; i<numPages; i++) {
-			
-		}
 
 		return allTickets;
 	}
 	
 	private static void driver() {
+		numTickets = tickets.size();
 		
+		// Updating numPages 
+		if(tickets.size() > 25) {
+			numPages = (int)Math.ceil(tickets.size()/25.0);
+		}
 	}
 	
 
