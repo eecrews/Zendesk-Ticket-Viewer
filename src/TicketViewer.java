@@ -2,6 +2,7 @@ import java.lang.ProcessBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 public class TicketViewer {
 	
@@ -11,7 +12,6 @@ public class TicketViewer {
 	private static int numPages = 1;
 	
 	private static void pagePartition() {
-		
 		// Does not iterate over the last page
 		for(int i=1; i<numPages; i++) {
 			List<String> newPage;
@@ -21,7 +21,7 @@ public class TicketViewer {
 			ticketPages.add(newPage);
 		}
 		
-		// Manual addition of last page
+		// Manual addition of tickets on the last page
 		int curr = (numPages-1)*25;
 		List<String> finalPage = new ArrayList<String>();
 		
@@ -33,6 +33,7 @@ public class TicketViewer {
 		ticketPages.add(finalPage);
 	}
 	
+	// TODO: Display only 5 tickets per line
 	private static String viewAllTickets() {
 		String allTickets = "";
 		
@@ -52,7 +53,30 @@ public class TicketViewer {
 		}
 		
 		pagePartition();
-		System.out.println(viewAllTickets());
+		
+		Scanner input = new Scanner(System.in);
+		do {
+			System.out.println("Welcome. Please enter <tickets> to view all tickets" + 
+					" and <end> to end the program.");
+			
+			String in = input.nextLine();
+			switch(in) {
+				case "tickets":
+					System.out.println(viewAllTickets());
+					break;
+				case "end":
+					System.exit(0);
+				default:
+					System.out.println("Invalid input. Please try again.");
+			}
+			
+		} while(true);
+		
+		//input.close();
+		
+		//System.out.println(viewAllTickets());
+		
+		
 		
 	}
 	
