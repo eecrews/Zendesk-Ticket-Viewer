@@ -1,6 +1,11 @@
+import java.io.BufferedReader;
+import org.json.simple.*;
+import org.json.simple.parser.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.ProcessBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,7 +18,7 @@ public class TicketViewer {
 	private static final String PAGE_NONEXISTENT = "Page does not exist. Please try again.";
 	
 	private static String email = "eecrews@wisc.edu";
-	private static String password = "Kiradog101!beau";
+	private static String password = "Kiradog101";
 	private static String subdomain = "zcceecrews";
 	
 	private static ArrayList<String> tickets = new ArrayList<String>();
@@ -89,17 +94,32 @@ public class TicketViewer {
 
 	}
 	
-	private static void fetchTicketsFromAPI() {
-		String curl = "curl https://" + subdomain + ".zendesk.com/api/v2/tickets.json \\-v -u " 
+	private static void getTicketsFromAPI() {
+		String curl = "curl https://" + subdomain + ".zendesk.com/api/v2/tickets.json \\ -v -u " 
 				+ email + ":" + password;
 		ProcessBuilder processBuilder = new ProcessBuilder(curl.split(" "));
-		processBuilder.directory(new File("/home/"));
+
 		try {
 			Process process = processBuilder.start();
 			InputStream inputStream = process.getInputStream();
-			int exitCode = process.exitValue();
+			BufferedReader r = new BufferedReader(new InputStreamReader(inputStream));
+			
+			JSONParser jp = new JSONParser();
+			JSONArray ja = (JSONArray)jp.parse(new InputStreamReader(inputStream, "UTF-8"));
+			
+			for (int i=0;i<ja.size();i++){   
+			    tickets.add(ja.getString(i));
+
+            }   
+			
+			
+			System.out.println(ja.toString());
+
 
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -118,11 +138,12 @@ public class TicketViewer {
 
 		try {
 			
-			fetchTicketsFromAPI();
+			getTicketsFromAPI();
 			
 		} catch(Exception e) {
-			
 		}
+		
+		System.out.println(tickets.size());
 		
 		
 		System.out.println("Welcome " + email + ". Here are your available tickets:");
@@ -136,7 +157,7 @@ public class TicketViewer {
 	
 	public static void main(String[] args) {
 		
-		tickets.add("One");
+		/*tickets.add("One");
 		tickets.add("Two");
 		tickets.add("Three");
 		tickets.add("One");
@@ -186,7 +207,7 @@ public class TicketViewer {
 		tickets.add("One");
 		tickets.add("Two");
 		tickets.add("Three");
-		tickets.add("One");
+		tickets.add("One"); */
 
 		
 		
