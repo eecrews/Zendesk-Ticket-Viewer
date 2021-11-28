@@ -139,7 +139,31 @@ public class TicketViewer {
 
 	}
 	
-	private static void viewSingleTicket() {
+	private static void singleTicketDriver() {
+		do {
+			System.out.println("Enter ticket number, or <m> to return to the menu.");
+			
+			String in = INPUT.nextLine();
+			
+			if(in.equals("m"))
+				return;
+			
+			int ticketToView;
+			
+			try {
+				ticketToView = Integer.parseInt(in);
+				
+				if(ticketToView > 0 && ticketToView < numTickets)
+					viewSingleTicket(ticketToView);
+				else
+					System.out.println(INVALID_INPUT);				
+			} catch(NumberFormatException e) {
+				System.out.println(INVALID_INPUT);
+			}
+		} while(true);
+	}
+	
+	private static void viewSingleTicket(int ticketNum) {
 		
 	}
 	
@@ -172,7 +196,7 @@ public class TicketViewer {
 					viewAllTickets();
 					break;		
 				case "2":
-					viewSingleTicket();
+					singleTicketDriver();
 					break;	
 				case "e":
 					System.out.println("Exiting program.");
