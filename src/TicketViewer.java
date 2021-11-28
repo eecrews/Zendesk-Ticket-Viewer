@@ -16,19 +16,22 @@ import java.util.Scanner;
 
 public class TicketViewer {
 	
-	private static final String INVALID_INPUT = "Invalid input. Please try again.";
-	private static final String PAGE_NONEXISTENT = "Page does not exist. Please try again.";
-	
+	/*
+	* 	Fill in your information below:
+	*/
 	private static String email = "eecrews@wisc.edu";
 	private static String password = "Kiradog101";
 	private static String subdomain = "zcceecrews";
+	
+	private static final String INVALID_INPUT = "Invalid input. Please try again.";
+	private static final String PAGE_NONEXISTENT = "Page does not exist. Please try again.";
 	
 	private static List<JSONObject> tickets = new ArrayList<JSONObject>();
 	private static List<List<JSONObject>> ticketPages = new ArrayList<List<JSONObject>>();
 	private static int numTickets;
 	private static int numPages = 1;
 	
-	private static Scanner input = new Scanner(System.in);
+	private static final Scanner INPUT = new Scanner(System.in);
 	
 	
 	private static void getTicketsFromAPI() {
@@ -99,7 +102,7 @@ public class TicketViewer {
 		do {
 			viewSinglePage(currPage);
 
-			String in = input.nextLine();
+			String in = INPUT.nextLine();
 			
 			switch(in) {
 				case "n":
@@ -128,9 +131,10 @@ public class TicketViewer {
 	
 	private static void viewSinglePage(int pageNum) {
 		System.out.println("\n--Page " + (pageNum) + " out of " + numPages + "--\n");
+		List<JSONObject> currTicketPage = ticketPages.get(pageNum-1);
 				
-		for(int i=0; i<Math.max((numTickets%25),25); i++) {
-			System.out.println("[" + (i+1) + "] " + ticketPages.get(pageNum-1).get(i).getString("subject"));
+		for(int i=0; i<currTicketPage.size(); i++) {
+			System.out.println("[" + (((pageNum-1)*25)+i+1) + "] " + currTicketPage.get(i).getString("subject"));
 		}
 
 	}
@@ -161,7 +165,7 @@ public class TicketViewer {
 			System.out.println("Welcome. Press 1 to view all tickets.\nPress 2 to view a single ticket.\n"
 					+ "Press e to exit the program.");
 			
-			String in = input.nextLine();
+			String in = INPUT.nextLine();
 			
 			switch(in) {
 				case "1":
@@ -172,7 +176,7 @@ public class TicketViewer {
 					break;	
 				case "e":
 					System.out.println("Exiting program.");
-					input.close();
+					INPUT.close();
 					System.exit(0);
 				default: 
 					System.out.println(INVALID_INPUT);
