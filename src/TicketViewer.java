@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
-import org.json.simple.*;
-import org.json.simple.parser.*;
+
+import org.json.JSONObject;
+import org.json.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.io.InputStreamReader;
 import java.lang.ProcessBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -21,15 +23,15 @@ public class TicketViewer {
 	private static String password = "Kiradog101";
 	private static String subdomain = "zcceecrews";
 	
-	private static ArrayList<String> tickets = new ArrayList<String>();
-	private static ArrayList<List<String>> ticketPages = new ArrayList<List<String>>();
+	private static List<JSONObject> tickets = new ArrayList<JSONObject>();
+	private static List<List<JSONObject>> ticketPages = new ArrayList<List<JSONObject>>();
 	private static int numTickets;
 	private static int numPages = 1;
 	
 	private static void pagePartition() {
 		// Does not iterate over the last page
 		for(int i=1; i<numPages; i++) {
-			List<String> newPage;
+			List<JSONObject> newPage;
 
 			newPage = tickets.subList((i-1)*25, i*25);
 
@@ -38,7 +40,7 @@ public class TicketViewer {
 		
 		// Manual addition of tickets on the last page
 		int curr = (numPages-1)*25;
-		List<String> finalPage = new ArrayList<String>();
+		List<JSONObject> finalPage = new ArrayList<JSONObject>();
 		
 		while(curr < numTickets) {
 			finalPage.add(tickets.get(curr));
@@ -104,22 +106,32 @@ public class TicketViewer {
 			InputStream inputStream = process.getInputStream();
 			BufferedReader r = new BufferedReader(new InputStreamReader(inputStream));
 			
-			JSONParser jp = new JSONParser();
-			JSONArray ja = (JSONArray)jp.parse(new InputStreamReader(inputStream, "UTF-8"));
+			StringBuilder sb = new StringBuilder();
+			String line;
 			
-			for (int i=0;i<ja.size();i++){   
-			    tickets.add(ja.getString(i));
+			while((line = r.readLine()) != null) {
+				sb.append(line);
+			}
+			
+			try {
+		        JSONObject jr = new JSONObject(sb.toString());
+		        JSONArray arr = jr.getJSONArray("tickets");
+		        
+		        
+		        for(int i=0; i < arr.length(); i++){
+		            tickets.add(arr.getJSONObject(i));
+		       }
+		        
+				System.out.println(tickets.toString());
 
-            }   
+		    } catch (JSONException e) {
+		       e.printStackTrace();
+		    }
 			
 			
-			System.out.println(ja.toString());
 
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
