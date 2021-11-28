@@ -88,10 +88,9 @@ public class TicketViewer {
 		ticketPages.add(finalPage);
 	}
 	
-	// TODO: Display only 1 ticket per line (?)
 	private static void viewAllTickets() {		
 		System.out.println("Enter <n> to view the next page and <p> for the previous page.\n" +
-					"Enter <b> to exit the program.");
+					"Enter <m> to return to the menu.");
 
 		// TODO: Close scanner?
 		Scanner input = new Scanner(System.in);
@@ -118,9 +117,8 @@ public class TicketViewer {
 						currPage--;
 					break;
 					
-				case "e":
-					input.close();
-					System.exit(0);
+				case "m":
+					return;
 				default: 
 					System.out.println(INVALID_INPUT);
 			}
@@ -132,7 +130,7 @@ public class TicketViewer {
 	private static void viewSinglePage(int pageNum) {
 		System.out.println("\n--Page " + (pageNum) + " out of " + numPages + "--\n");
 				
-		for(int i=0; i<numTickets%25; i++) {
+		for(int i=0; i<Math.max((numTickets%25),25); i++) {
 			System.out.println("[" + (i+1) + "] " + ticketPages.get(pageNum-1).get(i).getString("subject"));
 		}
 
@@ -162,7 +160,7 @@ public class TicketViewer {
 		
 		System.out.println("Welcome. Press 1 to view all tickets.\nPress 2 to view a single ticket.\n"
 				+ "Press e to exit the program.");
-				
+						
 		// TODO: Close scanner?
 		Scanner input = new Scanner(System.in);
 		
