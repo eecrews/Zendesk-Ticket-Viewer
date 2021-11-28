@@ -28,6 +28,44 @@ public class TicketViewer {
 	private static int numTickets;
 	private static int numPages = 1;
 	
+	
+	private static void getTicketsFromAPI() {
+		String curl = "curl https://" + subdomain + ".zendesk.com/api/v2/tickets.json \\ -v -u " 
+				+ email + ":" + password;
+		ProcessBuilder processBuilder = new ProcessBuilder(curl.split(" "));
+
+		try {
+			Process process = processBuilder.start();
+			InputStream inputStream = process.getInputStream();
+			BufferedReader r = new BufferedReader(new InputStreamReader(inputStream));
+			
+			StringBuilder sb = new StringBuilder();
+			String line;
+			
+			while((line = r.readLine()) != null) {
+				sb.append(line);
+			}
+			
+			try {
+		        JSONObject jr = new JSONObject(sb.toString());
+		        JSONArray arr = jr.getJSONArray("tickets");
+		        
+		        
+		        for(int i=0; i < arr.length(); i++){
+		            tickets.add(arr.getJSONObject(i));
+		       }
+		        
+		    } catch (JSONException e) {
+		       e.printStackTrace();
+		    }
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	
 	private static void pagePartition() {
 		// Does not iterate over the last page
 		for(int i=1; i<numPages; i++) {
@@ -50,10 +88,10 @@ public class TicketViewer {
 		ticketPages.add(finalPage);
 	}
 	
-	// TODO: Display only 5 tickets per line
+	// TODO: Display only 1 ticket per line (?)
 	private static void viewAllTickets() {		
 		System.out.println("Enter <n> to view the next page and <p> for the previous page.\n" +
-					"Enter <e> to exit the program.");
+					"Enter <b> to exit the program.");
 
 		// TODO: Close scanner?
 		Scanner input = new Scanner(System.in);
@@ -92,53 +130,27 @@ public class TicketViewer {
 	}
 	
 	private static void viewSinglePage(int pageNum) {
-		System.out.println("\nPage " + (pageNum) + " out of " + numPages + "\n" + ticketPages.get(pageNum-1).toString());
-
-	}
-	
-	private static void getTicketsFromAPI() {
-		String curl = "curl https://" + subdomain + ".zendesk.com/api/v2/tickets.json \\ -v -u " 
-				+ email + ":" + password;
-		ProcessBuilder processBuilder = new ProcessBuilder(curl.split(" "));
-
-		try {
-			Process process = processBuilder.start();
-			InputStream inputStream = process.getInputStream();
-			BufferedReader r = new BufferedReader(new InputStreamReader(inputStream));
-			
-			StringBuilder sb = new StringBuilder();
-			String line;
-			
-			while((line = r.readLine()) != null) {
-				sb.append(line);
-			}
-			
-			try {
-		        JSONObject jr = new JSONObject(sb.toString());
-		        JSONArray arr = jr.getJSONArray("tickets");
-		        
-		        
-		        for(int i=0; i < arr.length(); i++){
-		            tickets.add(arr.getJSONObject(i));
-		       }
-		        
-				System.out.println(tickets.toString());
-
-		    } catch (JSONException e) {
-		       e.printStackTrace();
-		    }
-			
-			
-
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		System.out.println("\n--Page " + (pageNum) + " out of " + numPages + "--\n");
+				
+		for(int i=0; i<numTickets%25; i++) {
+			System.out.println("[" + (i+1) + "] " + ticketPages.get(pageNum-1).get(i).getString("subject"));
 		}
 
 	}
 	
+	private static void viewSingleTicket() {
+		
+	}
+	
 	private static void driver() {
+		try {
+			
+			getTicketsFromAPI();
+			
+		} catch(Exception e) {
+		}
+		
+		
 		numTickets = tickets.size();
 		
 		// Updating numPages 
@@ -147,20 +159,32 @@ public class TicketViewer {
 		}
 		
 		pagePartition();
+		
+		System.out.println("Welcome. Press 1 to view all tickets.\nPress 2 to view a single ticket.\n"
+				+ "Press e to exit the program.");
+				
+		// TODO: Close scanner?
+		Scanner input = new Scanner(System.in);
+		
+		do {
 
-		try {
+			String in = input.nextLine();
 			
-			getTicketsFromAPI();
+			switch(in) {
+				case "1":
+					viewAllTickets();
+					break;		
+				case "2":
+					viewSingleTicket();
+					break;	
+				case "e":
+					input.close();
+					System.exit(0);
+				default: 
+					System.out.println(INVALID_INPUT);
+			}
 			
-		} catch(Exception e) {
-		}
-		
-		System.out.println(tickets.size());
-		
-		
-		System.out.println("Welcome " + email + ". Here are your available tickets:");
-		
-		viewAllTickets();
+		} while(true);
 		
 					
 	}
@@ -168,61 +192,7 @@ public class TicketViewer {
 
 	
 	public static void main(String[] args) {
-		
-		/*tickets.add("One");
-		tickets.add("Two");
-		tickets.add("Three");
-		tickets.add("One");
-		tickets.add("Two");
-		tickets.add("Three");
-		tickets.add("One");
-		tickets.add("Two");
-		tickets.add("Three");
-		tickets.add("One");
-		tickets.add("Two");
-		tickets.add("Three");
-		tickets.add("One");
-		tickets.add("Two");
-		tickets.add("Three");
-		tickets.add("One");
-		tickets.add("Two");
-		tickets.add("Three");
-		tickets.add("One");
-		tickets.add("Two");
-		tickets.add("Three");
-		tickets.add("One");
-		tickets.add("Two");
-		tickets.add("Three");
-		tickets.add("One");
-		
-		tickets.add("pageTwo");
-		tickets.add("Two");
-		tickets.add("Three");
-		tickets.add("One");
-		tickets.add("Two");
-		tickets.add("Three");
-		tickets.add("One");
-		tickets.add("Two");
-		tickets.add("Three");
-		tickets.add("One");
-		tickets.add("Two");
-		tickets.add("Three");
-		tickets.add("One");
-		tickets.add("Two");
-		tickets.add("Three");
-		tickets.add("One");
-		tickets.add("Two");
-		tickets.add("Three");
-		tickets.add("One");
-		tickets.add("Two");
-		tickets.add("Three");
-		tickets.add("One");
-		tickets.add("Two");
-		tickets.add("Three");
-		tickets.add("One"); */
-
-		
-		
+	
 		driver();
 
 	}
