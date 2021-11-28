@@ -28,6 +28,8 @@ public class TicketViewer {
 	private static int numTickets;
 	private static int numPages = 1;
 	
+	private static Scanner input = new Scanner(System.in);
+	
 	
 	private static void getTicketsFromAPI() {
 		String curl = "curl https://" + subdomain + ".zendesk.com/api/v2/tickets.json \\ -v -u " 
@@ -91,9 +93,6 @@ public class TicketViewer {
 	private static void viewAllTickets() {		
 		System.out.println("Enter <n> to view the next page and <p> for the previous page.\n" +
 					"Enter <m> to return to the menu.");
-
-		// TODO: Close scanner?
-		Scanner input = new Scanner(System.in);
 		
 		int currPage = 1;
 		
@@ -158,14 +157,10 @@ public class TicketViewer {
 		
 		pagePartition();
 		
-		System.out.println("Welcome. Press 1 to view all tickets.\nPress 2 to view a single ticket.\n"
-				+ "Press e to exit the program.");
-						
-		// TODO: Close scanner?
-		Scanner input = new Scanner(System.in);
-		
 		do {
-
+			System.out.println("Welcome. Press 1 to view all tickets.\nPress 2 to view a single ticket.\n"
+					+ "Press e to exit the program.");
+			
 			String in = input.nextLine();
 			
 			switch(in) {
@@ -176,6 +171,7 @@ public class TicketViewer {
 					viewSingleTicket();
 					break;	
 				case "e":
+					System.out.println("Exiting program.");
 					input.close();
 					System.exit(0);
 				default: 
