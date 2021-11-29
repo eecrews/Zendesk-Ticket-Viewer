@@ -34,7 +34,7 @@ public class TicketViewer {
 	private static final String GENERIC_EXIT = "Exiting program.";
 	private static final String API_ERROR = "Error connecting to API." + GENERIC_EXIT;
 	private static final String STREAM_ERROR = "Stream error." + GENERIC_EXIT;
-	
+
 	private static final String MAIN_MENU = "Welcome. Press 1 to view all tickets.\n"
 			+ "Press 2 to view a single ticket.\nPress e to exit the program.";
 	private static final String SCROLL_INSTR = "Enter <n> to view the next page and "
@@ -43,36 +43,34 @@ public class TicketViewer {
 
 	private List<JSONObject> tickets = new ArrayList<JSONObject>();
 	private List<List<JSONObject>> ticketPages = new ArrayList<List<JSONObject>>();
-	
-	/* 
-	 * Represents the total number of tickets in the user's account 
-	 * at the time the API is accessed. Default is 0 tickets.
+
+	/*
+	 * Represents the total number of tickets in the user's account at the time the
+	 * API is accessed. Default is 0 tickets.
 	 */
 	private int numTickets = 0;
-	
-	/* 
-	 * Represents the total number of pages that will be displayed 
-	 * by the program (max 25 tickets shown per page). Default is 1 page.
+
+	/*
+	 * Represents the total number of pages that will be displayed by the program
+	 * (max 25 tickets shown per page). Default is 1 page.
 	 */
 	private int numPages = 1;
 
 	private static final Scanner INPUT = new Scanner(System.in);
-	
 
 	public static void main(String[] args) {
 		TicketViewer viewer = new TicketViewer();
 		viewer.driver();
 	}
-	
+
 	/*
-	 * Controls input for the main menu. Users have the option to enter 1
-	 * to view a list of all their tickets or 2 to view a single ticket.
-	 * Users can enter 'e' to exit the program.
+	 * Controls input for the main menu. Users have the option to enter 1 to view a
+	 * list of all their tickets or 2 to view a single ticket. Users can enter 'e'
+	 * to exit the program.
 	 * 
 	 * Continues running until user presses e or an error occurs.
 	 * 
-	 * Displays an error message if user tries to enter anything besides
-	 * 1, 2, or e.
+	 * Displays an error message if user tries to enter anything besides 1, 2, or e.
 	 */
 	void driver() {
 
@@ -104,14 +102,14 @@ public class TicketViewer {
 	}
 
 	/*
-	 * Attempts to connect to the Zendesk API to retrieve a list
-	 * of all the user's tickets at the current time.
+	 * Attempts to connect to the Zendesk API to retrieve a list of all the user's
+	 * tickets at the current time.
 	 * 
-	 * If the tickets are successfully retrieved, the tickets JSONArray
-	 * is initialized with the JSON parsed from their account.
+	 * If the tickets are successfully retrieved, the tickets JSONArray is
+	 * initialized with the JSON parsed from their account.
 	 * 
-	 * If the API cannot be reached or there is a problem parsing
-	 * the JSON, an appropriate error message displays and the program is exited.
+	 * If the API cannot be reached or there is a problem parsing the JSON, an
+	 * appropriate error message displays and the program is exited.
 	 */
 	void getTicketsFromAPI() {
 		String curl = "curl -u " + email + "/token:" + apiKey + " https://" + subdomain
@@ -153,9 +151,9 @@ public class TicketViewer {
 	}
 
 	/*
-	 * Divides the list of tickets into smaller sublists of max size 25.
-	 * This will allow the user to scroll through all their tickets without seeing
-	 * more than 25 per page.
+	 * Divides the list of tickets into smaller sublists of max size 25. This will
+	 * allow the user to scroll through all their tickets without seeing more than
+	 * 25 per page.
 	 */
 	void pagePartition() {
 		// Does not iterate over the last page
@@ -183,11 +181,11 @@ public class TicketViewer {
 	 * Controls input for viewing all the tickets in the user's account at the
 	 * current time (user enters 1 on main menu).
 	 * 
-	 * User can enter n to view the next page of tickets, p to view
-	 * the previous page, and m to return to the main menu.
+	 * User can enter n to view the next page of tickets, p to view the previous
+	 * page, and m to return to the main menu.
 	 * 
-	 * If the user attempts to view a page that does not exist, (ie. page 0),
-	 * an error message is displayed and they can try another input.
+	 * If the user attempts to view a page that does not exist, (ie. page 0), an
+	 * error message is displayed and they can try another input.
 	 */
 	private void viewAllTickets() {
 		System.out.println(SCROLL_INSTR);
@@ -225,24 +223,25 @@ public class TicketViewer {
 	}
 
 	/*
-	 * Outputs a list of all the tickets on the page
-	 * currently being viewed by the user. 
+	 * Outputs a list of all the tickets on the page currently being viewed by the
+	 * user.
 	 * 
-	 * For example, if the user has 45 tickets in their account
-	 * and they are viewing page 2, this method returns a view of
-	 * the subjects of tickets 26-45.
+	 * For example, if the user has 45 tickets in their account and they are viewing
+	 * page 2, this method returns a view of the subjects of tickets 26-45.
 	 * 
 	 * Each ticket is given a number based on its index in the tickets list.
 	 * 
-	 * @param	current page number being viewed by user
-	 * @return	formatted view of the tickets on the current page
+	 * @param current page number being viewed by user
+	 * 
+	 * @return formatted view of the tickets on the current page
 	 */
 	private String viewSinglePage(int pageNum) {
 		String result = "\n--Page " + (pageNum) + " out of " + numPages + "--\n";
 		List<JSONObject> currTicketPage = ticketPages.get(pageNum - 1);
 
 		for (int i = 0; i < currTicketPage.size(); i++) {
-			result += "\n[" + (((pageNum - 1) * 25) + i + 1) + "] " + currTicketPage.get(i).getString("subject");
+			result += "\n[" + (((pageNum - 1) * 25) + i + 1) + "] " + 
+						currTicketPage.get(i).getString("subject");
 		}
 
 		return result;
@@ -250,12 +249,12 @@ public class TicketViewer {
 	}
 
 	/*
-	 * Controls input for viewing details of a single
-	 * ticket (user enters 2 on main menu).
+	 * Controls input for viewing details of a single ticket (user enters 2 on main
+	 * menu).
 	 * 
-	 * This method prompts the user to enter the number of a ticket
-	 * they would like to view. If they enter a number outside the
-	 * scope of tickets, they are re-prompted.
+	 * This method prompts the user to enter the number of a ticket they would like
+	 * to view. If they enter a number outside the scope of tickets, they are
+	 * re-prompted.
 	 * 
 	 * The user can also enter 'm' to return to the main menu.
 	 */
@@ -284,14 +283,15 @@ public class TicketViewer {
 	}
 
 	/*
-	 * Displays more details regarding a specific ticket the user
-	 * wants to view. The ticket number they pass in is based on the ticket's
-	 * index value in the list and is displayed next to the ticket's subject
-	 * in the program's output of all tickets.
+	 * Displays more details regarding a specific ticket the user wants to view. The
+	 * ticket number they pass in is based on the ticket's index value in the list
+	 * and is displayed next to the ticket's subject in the program's output of all
+	 * tickets.
 	 * 
-	 * @param	number of the ticket the user wants to view 
-	 * @return	formatted view of the subject, description, and priority
-	 * 			of the desired ticket, if such values exist
+	 * @param number of the ticket the user wants to view
+	 * 
+	 * @return formatted view of the subject, description, and priority of the
+	 * desired ticket, if such values exist
 	 */
 	private String viewSingleTicket(int ticketNum) {
 		String result = "-----------\nViewing ticket number " + ticketNum + ":";
@@ -319,11 +319,10 @@ public class TicketViewer {
 	}
 
 	/*
-	 * Helper method for setting global variables numTickets
-	 * and numPages.
+	 * Helper method for setting global variables numTickets and numPages.
 	 * 
-	 * The reason this method exists is to help with unit testing,
-	 * otherwise these variables would have been updated in driver().
+	 * The reason this method exists is to help with unit testing, otherwise these
+	 * variables would have been updated in driver().
 	 */
 	void setGlobals() {
 		numTickets = tickets.size();
@@ -333,12 +332,11 @@ public class TicketViewer {
 			numPages = (int) Math.ceil(tickets.size() / 25.0);
 		}
 	}
-	
 
 	/*
 	 * Get method to assist with unit testing.
 	 * 
-	 * @return	total number of tickets in user's account at time of API access
+	 * @return total number of tickets in user's account at time of API access
 	 */
 	int getNumTickets() {
 		return numTickets;
@@ -347,19 +345,19 @@ public class TicketViewer {
 	/*
 	 * Get method to assist with unit testing.
 	 * 
-	 * @return	total number of pages needed to display all tickets (max 25 per page)
+	 * @return total number of pages needed to display all tickets (max 25 per page)
 	 */
 	int getNumPages() {
 		return numPages;
 	}
-	
+
 	/*
 	 * Get method to assist with unit testing.
 	 * 
-	 * @return	List of JSONObject Lists holding tickets on each page
+	 * @return List of JSONObject Lists holding tickets on each page
 	 */
 	List<List<JSONObject>> getTicketPages() {
 		return ticketPages;
 	}
-	
+
 }
