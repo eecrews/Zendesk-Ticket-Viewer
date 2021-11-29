@@ -1,8 +1,16 @@
-import java.io.BufferedReader;
+/*
+ * Created by Erin Crews for the 2022 Zendesk 
+ * 	Internship Coding Challenge.
+ * 
+ * See README for more information.
+ * 
+ * Submitted on 28 November 2021.
+ * 
+ */
 
+import java.io.BufferedReader;
 import org.json.*;
 import org.apache.commons.text.*;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -16,12 +24,22 @@ public class TicketViewer {
 	/*
 	 * Fill in your information below:
 	 */
-	private String email = "eecrews@wisc.edu";
-	private String subdomain = "zcceecrews";
-	private String apiKey = "cssVjedmhJuxJqCmwUiGiPb9mUgynXj58QSQRbzA";
+	private String email = "youremail@domain.com";
+	private String subdomain = "yoursubdomain";
+	private String apiKey = "yourapikey";
 
 	private static final String INVALID_INPUT = "Invalid input. Please try again.";
 	private static final String PAGE_NONEXISTENT = "Page does not exist. Please try again.";
+
+	private static final String GENERIC_EXIT = "Exiting program.";
+	private static final String API_ERROR = "Error connecting to API." + GENERIC_EXIT;
+	private static final String STREAM_ERROR = "Stream error." + GENERIC_EXIT;
+	
+	private static final String MAIN_MENU = "Welcome. Press 1 to view all tickets.\n"
+			+ "Press 2 to view a single ticket.\nPress e to exit the program.";
+	private static final String SCROLL_INSTR = "Enter <n> to view the next page and "
+			+ "<p> for the previous page.\nEnter <m> to return to the menu.";
+	private static final String ENTER_TICKET_NUM = "Enter ticket number, or <m> to return to the menu.";
 
 	private List<JSONObject> tickets = new ArrayList<JSONObject>();
 	private List<List<JSONObject>> ticketPages = new ArrayList<List<JSONObject>>();
@@ -29,17 +47,40 @@ public class TicketViewer {
 	private int numPages = 1;
 
 	private static final Scanner INPUT = new Scanner(System.in);
+	
 
-	int getNumTickets() {
-		return numTickets;
+	public static void main(String[] args) {
+		TicketViewer viewer = new TicketViewer();
+		viewer.driver();
 	}
+	
+	void driver() {
 
-	int getNumPages() {
-		return numPages;
-	}
+		getTicketsFromAPI();
+		setGlobals();
+		pagePartition();
 
-	List<List<JSONObject>> getTicketPages() {
-		return ticketPages;
+		do {
+			System.out.println(MAIN_MENU);
+
+			String in = INPUT.nextLine();
+
+			switch (in) {
+			case "1":
+				viewAllTickets();
+				break;
+			case "2":
+				singleTicketDriver();
+				break;
+			case "e":
+				System.out.println(GENERIC_EXIT);
+				INPUT.close();
+				System.exit(0);
+			default:
+				System.out.println(INVALID_INPUT);
+			}
+
+		} while (true);
 	}
 
 	void getTicketsFromAPI() {
@@ -68,13 +109,13 @@ public class TicketViewer {
 				}
 
 			} catch (JSONException e) {
-				System.out.println("Error connecting to API. Exiting program.");
+				System.out.println(API_ERROR);
 				INPUT.close();
 				System.exit(0);
 			}
 
 		} catch (IOException e) {
-			System.out.println("Stream error. Exiting program.");
+			System.out.println(STREAM_ERROR);
 			INPUT.close();
 			System.exit(0);
 		}
@@ -103,9 +144,8 @@ public class TicketViewer {
 		ticketPages.add(finalPage);
 	}
 
-	void viewAllTickets() {
-		System.out.println("Enter <n> to view the next page and <p> for the previous page.\n"
-				+ "Enter <m> to return to the menu.");
+	private void viewAllTickets() {
+		System.out.println(SCROLL_INSTR);
 
 		int currPage = 1;
 
@@ -139,7 +179,7 @@ public class TicketViewer {
 
 	}
 
-	String viewSinglePage(int pageNum) {
+	private String viewSinglePage(int pageNum) {
 		String result = "\n--Page " + (pageNum) + " out of " + numPages + "--\n";
 		List<JSONObject> currTicketPage = ticketPages.get(pageNum - 1);
 
@@ -151,9 +191,9 @@ public class TicketViewer {
 
 	}
 
-	void singleTicketDriver() {
+	private void singleTicketDriver() {
 		do {
-			System.out.println("\nEnter ticket number, or <m> to return to the menu.");
+			System.out.println(ENTER_TICKET_NUM);
 
 			String in = INPUT.nextLine();
 
@@ -175,7 +215,7 @@ public class TicketViewer {
 		} while (true);
 	}
 
-	String viewSingleTicket(int ticketNum) {
+	private String viewSingleTicket(int ticketNum) {
 		String result = "-----------\nViewing ticket number " + ticketNum + ":";
 		JSONObject curr = tickets.get(ticketNum - 1);
 
@@ -208,43 +248,18 @@ public class TicketViewer {
 			numPages = (int) Math.ceil(tickets.size() / 25.0);
 		}
 	}
+	
 
-	void driver() {
-		try {
-			getTicketsFromAPI();
-
-		} catch (Exception e) {
-		}
-
-		setGlobals();
-		pagePartition();
-
-		do {
-			System.out.println("Welcome. Press 1 to view all tickets.\nPress 2 to view a single ticket.\n"
-					+ "Press e to exit the program.");
-
-			String in = INPUT.nextLine();
-
-			switch (in) {
-			case "1":
-				viewAllTickets();
-				break;
-			case "2":
-				singleTicketDriver();
-				break;
-			case "e":
-				System.out.println("Exiting program.");
-				INPUT.close();
-				System.exit(0);
-			default:
-				System.out.println(INVALID_INPUT);
-			}
-
-		} while (true);
+	int getNumTickets() {
+		return numTickets;
 	}
 
-	public static void main(String[] args) {
-		TicketViewer viewer = new TicketViewer();
-		viewer.driver();
+	int getNumPages() {
+		return numPages;
 	}
+
+	List<List<JSONObject>> getTicketPages() {
+		return ticketPages;
+	}
+	
 }
