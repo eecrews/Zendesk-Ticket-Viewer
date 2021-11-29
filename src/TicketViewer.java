@@ -18,34 +18,34 @@ public class TicketViewer {
 	/*
 	* 	Fill in your information below:
 	*/
-	private static String email = "eecrews@wisc.edu";
-	private static String subdomain = "zcceecrews";
-	private static String apiKey = "cssVjedmhJuxJqCmwUiGiPb9mUgynXj58QSQRbzA";
+	private String email = "eecrews@wisc.edu";
+	private String subdomain = "zcceecrews";
+	private String apiKey = "cssVjedmhJuxJqCmwUiGiPb9mUgynXj58QSQRbzA";
 	
 	private static final String INVALID_INPUT = "Invalid input. Please try again.";
 	private static final String PAGE_NONEXISTENT = "Page does not exist. Please try again.";
 	
-	private static List<JSONObject> tickets = new ArrayList<JSONObject>();
-	private static List<List<JSONObject>> ticketPages = new ArrayList<List<JSONObject>>();
-	private static int numTickets = 0;
-	private static int numPages = 1;
+	private List<JSONObject> tickets = new ArrayList<JSONObject>();
+	private List<List<JSONObject>> ticketPages = new ArrayList<List<JSONObject>>();
+	private int numTickets = 0;
+	private int numPages = 1;
 	
 	private static final Scanner INPUT = new Scanner(System.in);
 	
-	static int getNumTickets() {
+	int getNumTickets() {
 		return numTickets;
 	}
 	
-	static int getNumPages() {
+	int getNumPages() {
 		return numPages;
 	}
 	
-	static List<List<JSONObject>> getTicketPages() {
+	List<List<JSONObject>> getTicketPages() {
 		return ticketPages;
 	}
 	
 	
-	static void getTicketsFromAPI() {
+	void getTicketsFromAPI() {
 		String curl = "curl -u " + email + "/token:" + apiKey + 
 				" https://" + subdomain + ".zendesk.com/api/v2/tickets.json";
 		ProcessBuilder processBuilder = new ProcessBuilder(curl.split(" "));
@@ -85,7 +85,7 @@ public class TicketViewer {
 
 	}
 	
-	static void pagePartition() {
+	void pagePartition() {
 		// Does not iterate over the last page
 		for(int i=1; i<numPages; i++) {
 			List<JSONObject> newPage;
@@ -107,7 +107,7 @@ public class TicketViewer {
 		ticketPages.add(finalPage);
 	}
 	
-	static void viewAllTickets() {		
+	void viewAllTickets() {		
 		System.out.println("Enter <n> to view the next page and <p> for the previous page.\n" +
 					"Enter <m> to return to the menu.");
 		
@@ -143,7 +143,7 @@ public class TicketViewer {
 		
 	}
 	
-	static void viewSinglePage(int pageNum) {
+	void viewSinglePage(int pageNum) {
 		System.out.println("\n--Page " + (pageNum) + " out of " + numPages + "--\n");
 		List<JSONObject> currTicketPage = ticketPages.get(pageNum-1);
 				
@@ -153,7 +153,7 @@ public class TicketViewer {
 
 	}
 	
-	static void singleTicketDriver() {
+	void singleTicketDriver() {
 		do {
 			System.out.println("\nEnter ticket number, or <m> to return to the menu.");
 			
@@ -177,7 +177,7 @@ public class TicketViewer {
 		} while(true);
 	}
 	
-	static void viewSingleTicket(int ticketNum) {
+	void viewSingleTicket(int ticketNum) {
 		JSONObject curr = tickets.get(ticketNum-1);
 		
 		System.out.println("----------\nViewing ticket number " + ticketNum + ":");
@@ -202,7 +202,7 @@ public class TicketViewer {
 		}
 	}
 	
-	static void setGlobals() {
+	void setGlobals() {
 		numTickets = tickets.size();
 		
 		// Updating numPages 
@@ -211,9 +211,8 @@ public class TicketViewer {
 		}
 	}
 	
-	private static void driver() {
+	void driver() {
 		try {
-			
 			getTicketsFromAPI();
 			
 		} catch(Exception e) {
@@ -248,6 +247,7 @@ public class TicketViewer {
 	}
 	
 	public static void main(String[] args) {	
-		driver();
+		TicketViewer viewer = new TicketViewer();
+		viewer.driver();
 	}
 }

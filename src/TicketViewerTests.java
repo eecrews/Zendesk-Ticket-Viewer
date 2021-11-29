@@ -5,13 +5,13 @@ import org.junit.Before;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-class TicketViewerTests {
+/*class TicketViewerTests {
 	
 	/*@Before
 	void setUp() {
 		TicketViewer.getTicketsFromAPI();
 		TicketViewer.setGlobals();
-	}  */
+	}  
 
 	@Disabled
 	@Test
@@ -39,4 +39,4 @@ class TicketViewerTests {
 
 	}
 
-}
+}*/
