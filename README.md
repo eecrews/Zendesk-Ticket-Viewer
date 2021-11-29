@@ -7,6 +7,7 @@ the Zendesk API and view details of specific tickets.
 # Requires 
 Java JDK 
 Java 11.0.4
+Java IDE
 
 External Libraries: 
 json.org
@@ -19,6 +20,8 @@ JUnit 5 (Jupiter)
 Once downloaded, change the "email," "subdomain," and "apiKey" variables in the file
 TicketViewer.java to your corresponding information.
 This will allow you to access the Zendesk API.
+
+Open TicketViewer.java in API of your choice. Compile and run.
 
 # References Used
 https://www.baeldung.com/java-curl for assistance in using cURL commands in Java
