@@ -4,14 +4,11 @@ import org.json.*;
 import org.apache.commons.text.*;
 
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.ProcessBuilder;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -22,8 +19,8 @@ public class TicketViewer {
 	* 	Fill in your information below:
 	*/
 	private static String email = "eecrews@wisc.edu";
-	private static String password = "Kiradog101";
 	private static String subdomain = "zcceecrews";
+	private static String api = "cssVjedmhJuxJqCmwUiGiPb9mUgynXj58QSQRbzA";
 	
 	private static final String INVALID_INPUT = "Invalid input. Please try again.";
 	private static final String PAGE_NONEXISTENT = "Page does not exist. Please try again.";
@@ -37,8 +34,8 @@ public class TicketViewer {
 	
 	
 	private static void getTicketsFromAPI() {
-		String curl = "curl https://" + subdomain + ".zendesk.com/api/v2/tickets.json \\ -v -u " 
-				+ email + ":" + password;
+		String curl = "curl -u " + email + "/token:" + api + 
+				" https://" + subdomain + ".zendesk.com/api/v2/tickets.json";
 		ProcessBuilder processBuilder = new ProcessBuilder(curl.split(" "));
 
 		try {
@@ -230,17 +227,11 @@ public class TicketViewer {
 			}
 			
 		} while(true);
-		
-					
 	}
 	
 
 	
-	public static void main(String[] args) {
-	
+	public static void main(String[] args) {	
 		driver();
-
 	}
-	
-
 }
