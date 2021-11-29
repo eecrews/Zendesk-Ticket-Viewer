@@ -1,7 +1,8 @@
 import java.io.BufferedReader;
 
-import org.json.JSONObject;
 import org.json.*;
+import org.apache.commons.text.*;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
+
 
 public class TicketViewer {
 	
@@ -141,7 +143,7 @@ public class TicketViewer {
 	
 	private static void singleTicketDriver() {
 		do {
-			System.out.println("Enter ticket number, or <m> to return to the menu.");
+			System.out.println("\nEnter ticket number, or <m> to return to the menu.");
 			
 			String in = INPUT.nextLine();
 			
@@ -153,7 +155,7 @@ public class TicketViewer {
 			try {
 				ticketToView = Integer.parseInt(in);
 				
-				if(ticketToView > 0 && ticketToView < numTickets)
+				if(ticketToView > 0 && ticketToView <= numTickets)
 					viewSingleTicket(ticketToView);
 				else
 					System.out.println(INVALID_INPUT);				
@@ -164,7 +166,28 @@ public class TicketViewer {
 	}
 	
 	private static void viewSingleTicket(int ticketNum) {
+		JSONObject curr = tickets.get(ticketNum-1);
 		
+		System.out.println("----------\nViewing ticket number " + ticketNum + ":");
+		
+		try {
+			System.out.println("\nSubject: " + curr.getString("subject"));
+		} catch(JSONException e) {
+			System.out.println("\nNo subject.");
+		}
+		
+		try {
+			System.out.println("\nDescription: " + WordUtils.wrap(curr.getString("description"), 60));
+		} catch(JSONException e) {
+			System.out.println("\nNo description.");
+		}
+		
+		try {
+			System.out.println("\nPriority: " + curr.getString("priority"));
+		} catch(JSONException e)
+		{
+			System.out.println("\nNo priority value set.");
+		}
 	}
 	
 	private static void driver() {
