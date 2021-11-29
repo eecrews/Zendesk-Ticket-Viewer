@@ -5,7 +5,6 @@
  * See README for more information.
  * 
  * Submitted on 28 November 2021.
- * 
  */
 
 import java.io.BufferedReader;
@@ -359,5 +358,4 @@ public class TicketViewer {
 	List<List<JSONObject>> getTicketPages() {
 		return ticketPages;
 	}
-
 }
