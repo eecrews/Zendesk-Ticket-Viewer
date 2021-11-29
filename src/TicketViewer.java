@@ -221,7 +221,7 @@ public class TicketViewer {
 		
 		setGlobals();		
 		pagePartition();
-		
+				
 		do {
 			System.out.println("Welcome. Press 1 to view all tickets.\nPress 2 to view a single ticket.\n"
 					+ "Press e to exit the program.");
